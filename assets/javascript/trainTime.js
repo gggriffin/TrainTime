@@ -1,15 +1,35 @@
-// (TEST 1)
-    // First Train of the Day is 3:00 AM
-    // Assume Train comes every 3 minutes.
-    // Assume the current time is 3:16 AM....
-    // What time would the next train be...? (Use your brain first)
-    // It would be 3:18 -- 2 minutes away
+// Initialize Firebase
+var config = {
+    apiKey: "AIzaSyDlTxDifEAi_hVFQ0Ij3MmhMa3E2wwIeyA",
+    authDomain: "traintime-53200.firebaseapp.com",
+    databaseURL: "https://traintime-53200.firebaseio.com",
+    projectId: "traintime-53200",
+    storageBucket: "traintime-53200.appspot.com",
+    messagingSenderId: "149625528710"
+};
+firebase.initializeApp(config);
 
-    // Solved Mathematically               
-    // Test case 1:                               var remainingMinutes = (currentTime minutes - firstTrain minutes)
-    // 16 - 00 = 16                               
-    // 16 % 3 = 1 (Modulus is the remainder)      var remainder = remainingMinutes%trainFrequency
-    // 3 - 1 = 2 minutes away                     var minutesAway = trainFrequency - remainder
-    // 2 + 3:16 = 3:18                            var arrivalTime = minutesAway + currentTime
-    //                                            display minutesAway
-    //                                            display arrivalTime
+$('#submitButton').on('click', function () {
+    var currentMin = moment().format('mm'); 
+    var newFrequency = $('#frequencyInput').val()
+    var remainder = (currentMin % newFrequency);
+    var minutesAway = (newFrequency - remainder);
+    var nextArrival = moment().add(minutesAway, 'minutes');
+    var convertedArrival = moment(nextArrival).format('HH:mm');
+    var newName = $('#nameInput').val().trim();
+    var newDestination = $('#destinationInput').val().trim();
+
+    var newRow = $('<tr>').append (
+        $('<td>').text(newName),
+        $('<td>').text(newDestination),
+        $('<td>').text(newFrequency),
+        $('<td>').text(convertedArrival),
+        $('<td>').text(minutesAway),
+    );
+
+    $('#scheduleTable > tbody').append(newRow);
+    $('#nameInput').val('');
+    $('#destinationInput').val('');
+    $('#firstTrainInput').val('');
+    $('#frequencyInput').val('');
+});
