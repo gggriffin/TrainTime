@@ -9,6 +9,8 @@ var config = {
 };
 firebase.initializeApp(config);
 
+var database = firebase.database();
+
 $('#submitButton').on('click', function () {
     var currentMin = moment().format('mm'); 
     var newFrequency = $('#frequencyInput').val()
@@ -26,6 +28,14 @@ $('#submitButton').on('click', function () {
         $('<td>').text(convertedArrival),
         $('<td>').text(minutesAway),
     );
+
+    database.ref().set({
+        Name: newName,
+        Destination: newDestination,
+        Frequency: newFrequency,
+        NextTrain: convertedArrival,
+        MinutesAway: minutesAway,
+    });
 
     $('#scheduleTable > tbody').append(newRow);
     $('#nameInput').val('');
